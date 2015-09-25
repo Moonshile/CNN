@@ -73,7 +73,7 @@ def upsample(image, shape, size=(2,2), border_mode='cut'):
     """
     Perform the reverse of a max pooling for 2-dimension data
 
-    :param border_mode: 'cut' to cut the result to fit shape
+    :param border_mode: {'cut', 'extend'}, 'cut' to cut the result to fit shape
                         'extend' to extend the result to fit shape
     """
     row, col = image.shape
