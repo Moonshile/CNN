@@ -41,7 +41,7 @@ class ConvLayer(BpLayer):
         """
         Refine parameters of this layer with residuals from next layer
         """
-        # update weights and bias
+        # compute gradient
         partial_theta = numpy.asarray(map(
             lambda i: numpy.rot90(conv2d(
                 reduce(lambda res, x: res + self.x_imgs[x], self.connections[i], 0),
@@ -50,8 +50,6 @@ class ConvLayer(BpLayer):
             xrange(0, len(self.connections))
         ))
         parital_b = numpy.asarray(map(lambda x: numpy.sum(x), self.delta))
-        self.theta -= self.learning_rate*partial_theta
-        self.b -= self.learning_rate*parital_b
         # if previous layer is input layer, then do nothing
         if isinstance(self.prev_layer, InputLayer):
             return
@@ -77,6 +75,9 @@ class ConvLayer(BpLayer):
             ),
             xrange(0, len(self.x_imgs))
         ))
+        # update weights and bias
+        self.theta -= self.learning_rate*partial_theta
+        self.b -= self.learning_rate*parital_b
         # continue back propagating
         self.prev_layer.back_propagate()
 
